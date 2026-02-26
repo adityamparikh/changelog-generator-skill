@@ -1,6 +1,7 @@
 ---
 name: changelog-generator
 description: Automatically creates user-facing changelogs from git commits by analyzing commit history, categorizing changes, and transforming technical commits into clear, customer-friendly release notes. Turns hours of manual changelog writing into minutes of automated generation.
+allowed-tools: Bash(*), Glob(*), Grep(*), Read(*), WebFetch(*), WebSearch(*), mcp__claude_ai_Context7__*, mcp__plugin_context7_context7__*
 ---
 
 # Changelog Generator
@@ -16,6 +17,21 @@ This skill transforms technical git commits into polished, user-friendly changel
 - Generating update notifications
 - Creating internal release documentation
 - Maintaining a public changelog/product updates page
+
+## Verify Library and Framework Usage
+
+The model's training data has a knowledge cutoff. When changelog commits reference library upgrades, new framework features, or dependency changes, **actively verify** that descriptions are accurate:
+
+1. **Identify versions** — Check `pom.xml`, `build.gradle.kts`, `package.json`, or other dependency files to determine the exact versions of libraries and frameworks mentioned in commits.
+2. **Look up current documentation** — Use Context7 (`mcp__claude_ai_Context7__resolve-library-id` then `mcp__claude_ai_Context7__query-docs`) to retrieve up-to-date documentation for any library or framework where:
+   - The version is newer than what the model may have been trained on
+   - You need to accurately describe what a library upgrade or new feature does in user-friendly terms
+3. **Search the web** — Use `WebSearch` and `WebFetch` to check for:
+   - Release notes and changelogs for upgraded dependencies to accurately summarize what changed
+   - Feature announcements that help translate technical commits into user-friendly language
+4. **Check GitHub** — Use `gh` CLI to check release notes, changelogs, or issues for dependencies when needed (e.g., `gh api repos/{owner}/{repo}/releases/latest`)
+
+**Do not assume** that a library feature or behavior is correct based solely on model knowledge. When in doubt, look it up.
 
 ## What This Skill Does
 
